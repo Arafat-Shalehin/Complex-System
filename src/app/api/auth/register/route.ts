@@ -30,6 +30,7 @@ export async function POST(request: Request) {
       name,
       email,
       password,
+      role: "user",
     });
 
     const token = generateToken(user._id.toString());
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
           id: user._id,
           name: user.name,
           email: user.email,
+          role: user.role,
         },
       },
       {
