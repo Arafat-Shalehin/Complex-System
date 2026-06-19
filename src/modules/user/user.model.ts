@@ -3,12 +3,16 @@ import bcrypt from "bcryptjs";
 
 const SALT_ROUNDS = 10;
 
+export type UserRole = "USER" | "ADMIN" | "SUPPORT";
+
+type AccountStatus = "PENDING" | "ACTIVE" | "FROZEN" | "CLOSED";
+
 export interface IUser {
   name: string;
   email: string;
   password: string;
-  role: string;
-  accountStatus: boolean;
+  role: UserRole;
+  accountStatus: AccountStatus;
   kycVerification: boolean;
   isBanned: boolean;
   createdAt?: Date;
@@ -50,12 +54,14 @@ const userSchema = new Schema<UserModelType>(
 
     role: {
       type: String,
-      default: "user",
+      enum: ["USER", "ADMIN", "SUPPORT"],
+      default: "USER",
     },
 
     accountStatus: {
-      type: Boolean,
-      default: true,
+      type: String,
+      enum: ["PENDING", "ACTIVE", "FROZEN", "CLOSED"],
+      default: "PENDING",
     },
 
     kycVerification: {
@@ -70,7 +76,7 @@ const userSchema = new Schema<UserModelType>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 userSchema.pre("save", async function () {
@@ -79,15 +85,13 @@ userSchema.pre("save", async function () {
   }
 
   this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
-
 });
 
 userSchema.methods.comparePassword = async function (
-  password: string
+  password: string,
 ): Promise<boolean> {
   return bcrypt.compare(password, this.password);
 };
 
 export const userModel =
-  mongoose.models.User ||
-  mongoose.model<UserModelType>("user", userSchema);
+  mongoose.models.User || mongoose.model<UserModelType>("user", userSchema);
