@@ -10,7 +10,6 @@ export type AccountStatus = "PENDING" | "ACTIVE" | "FROZEN" | "CLOSED";
 export type KycStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export interface IUser {
-  userId: string;
   name: string;
   email: string;
   password: string;
