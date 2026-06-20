@@ -5,15 +5,18 @@ const SALT_ROUNDS = 10;
 
 export type UserRole = "USER" | "ADMIN" | "SUPPORT";
 
-type AccountStatus = "PENDING" | "ACTIVE" | "FROZEN" | "CLOSED";
+export type AccountStatus = "PENDING" | "ACTIVE" | "FROZEN" | "CLOSED";
+
+export type KycStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export interface IUser {
+  userId: string;
   name: string;
   email: string;
   password: string;
   role: UserRole;
   accountStatus: AccountStatus;
-  kycVerification: boolean;
+  kycVerification: KycStatus;
   isBanned: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -65,8 +68,9 @@ const userSchema = new Schema<UserModelType>(
     },
 
     kycVerification: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["PENDING", "APPROVED", "REJECTED"],
+      default: "PENDING",
     },
 
     isBanned: {
