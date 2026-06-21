@@ -67,8 +67,8 @@ accountSchema.index({
   status: 1,
 });
 
-export const AccountModel =
-  mongoose.models.Account ||
+export const accountModel =
+  mongoose.models.account ||
   mongoose.model<IAccount>(
     "account",
     accountSchema

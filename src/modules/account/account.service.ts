@@ -1,12 +1,25 @@
-import { AccountModel } from "./account.model";
+import { AuthUser } from "@/lib/auth";
 import { userModel } from "../user/user.model";
+import { accountModel } from "./account.model";
+
+type CreateAccountResult =
+  | {
+      success: true;
+      account: unknown;
+    }
+  | {
+      success: false;
+      reason:
+        | "USER_NOT_FOUND"
+        | "USER_BANNED"
+        | "KYC_NOT_APPROVED"
+        | "ACCOUNT_ALREADY_EXISTS";
+    };
 
 export const createAccount = async (
-  userId: string
-) => {
-  const user = await userModel.findById(
-    userId
-  );
+  auth: AuthUser,
+): Promise<CreateAccountResult> => {
+  const user = await userModel.findById(auth.userId);
 
   if (!user) {
     return {
@@ -15,11 +28,24 @@ export const createAccount = async (
     };
   }
 
-  const existingAccount =
-    await AccountModel.findOne({
-      user: userId,
-      status: "ACTIVE",
-    });
+  if (user.isBanned) {
+    return {
+      success: false,
+      reason: "USER_BANNED",
+    };
+  }
+
+  if (user.kycVerification !== "APPROVED") {
+    return {
+      success: false,
+      reason: "KYC_NOT_APPROVED",
+    };
+  }
+
+  const existingAccount = await accountModel.findOne({
+    user: user._id,
+    status: "ACTIVE",
+  });
 
   if (existingAccount) {
     return {
@@ -28,14 +54,12 @@ export const createAccount = async (
     };
   }
 
-  const accountNumber =
-    Date.now().toString();
+  const accountNumber = `${Date.now()}${Math.floor(Math.random() * 100000)}`;
 
-  const account =
-    await AccountModel.create({
-      user: userId,
-      accountNumber,
-    });
+  const account = await accountModel.create({
+    user: user._id,
+    accountNumber,
+  });
 
   return {
     success: true,
