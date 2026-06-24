@@ -3,11 +3,8 @@ import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    type: "OAuth2",
     user: process.env.EMAIL_USER,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refreshToken: process.env.REFRESH_TOKEN,
+    pass: process.env.EMAIL_PASS
   },
 });
 
@@ -69,7 +66,7 @@ Security Notice:
 If you did not create this account, please contact our support team immediately.
 
 Support:
-Email: support@bankingsystem.com
+Email: support@simpleway.com
 
 Thank you for choosing SimpleWay.
 
@@ -120,7 +117,7 @@ This is an automated email. Please do not reply directly to this message.
     <div style="margin-top:32px;">
       <p>
         Need help? Contact us at:
-        <strong>support@bankingsystem.com</strong>
+        <strong>support@simpleway.com</strong>
       </p>
     </div>
   </div>
