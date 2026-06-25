@@ -1,0 +1,75 @@
+Test 6: User Exists But KYC Pending
+
+After registration your user should be:
+
+{
+  "kycVerification": "PENDING"
+}
+
+Try:
+
+POST /api/account
+
+Expected:
+
+403
+
+Message:
+
+KYC verification is required...
+
+
+Test 7: KYC Approved
+
+Manually update MongoDB:
+
+{
+  "kycVerification": "APPROVED"
+}
+
+Then:
+
+POST /api/account
+
+Expected:
+
+201
+
+Verify:
+
+{
+  "user": "...",
+  "accountNumber": "..."
+}
+
+created in accounts collection.
+
+
+Test 8: Duplicate Account
+
+Call:
+
+POST /api/account
+
+again.
+
+Expected:
+
+409
+
+
+Test 9: Banned User
+
+Update MongoDB:
+
+{
+  "isBanned": true
+}
+
+Then:
+
+POST /api/account
+
+Expected:
+
+403

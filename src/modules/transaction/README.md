@@ -12,6 +12,7 @@ Transaction States:
 - Pending
 - Success
 - Failed
+- Reversed
 
 Important:
 This is one of the most critical modules in the project.
