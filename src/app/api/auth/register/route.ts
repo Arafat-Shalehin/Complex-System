@@ -26,11 +26,13 @@ export async function POST(request: Request) {
       );
     }
 
+    // console.log(name, email, password);
+
     const user = await userModel.create({
       name,
       email,
       password,
-      role: "user",
+      role: "USER",
     });
 
     const token = generateToken(user._id.toString());
