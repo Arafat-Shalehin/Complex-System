@@ -4,7 +4,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -136,4 +136,30 @@ This is an automated email. Please do not reply directly to this message.
   } catch (error) {
     console.error("Registration email failed:", error);
   }
+}
+
+export async function sendTransactionEmail(
+  userEmail: string,
+  name: string,
+  amount: number,
+  toAccount: string,
+) {
+  const subject = "Transaction Successful!";
+  const text = `Bla Bla`;
+  const html = `Bla Bla`;
+
+  await sendEmail(userEmail, subject, text, html);
+}
+
+export async function sendTransactionFailureEmail(
+  userEmail: string,
+  name: string,
+  amount: number,
+  toAccount: string,
+) {
+  const subject = "Transaction Failed";
+  const text = `Bla Bla`;
+  const html = `Bla Bla`;
+
+  await sendEmail(userEmail, subject, text, html);
 }
