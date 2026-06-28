@@ -142,11 +142,76 @@ export async function sendTransactionEmail(
   userEmail: string,
   name: string,
   amount: number,
-  toAccount: string,
-) {
-  const subject = "Transaction Successful!";
-  const text = `Bla Bla`;
-  const html = `Bla Bla`;
+  recipientAccountNumber: string,
+): Promise<void> {
+  const subject = "Transaction Completed";
+
+  const text = `
+Hello ${name},
+
+Your transaction has been completed successfully.
+
+Transaction Details:
+- Amount: ${amount}
+- Recipient Account: ${recipientAccountNumber}
+- Status: COMPLETED
+
+Please review your account if you do not recognize this transaction.
+
+Thank you for banking with SimpleWay.
+
+Best Regards,
+SimpleWay Team
+
+This is an automated email. Please do not reply to this email.
+`;
+
+  const html = `
+<div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+
+  <div style="background:#111827;color:white;padding:24px;text-align:center;">
+    <h1 style="margin:0;">SimpleWay</h1>
+  </div>
+
+  <div style="padding:32px;">
+
+    <h2 style="margin-top:0;">
+      Transaction Completed ✅
+    </h2>
+
+    <p>
+      Hello <strong>${name}</strong>,
+    </p>
+
+    <p>
+      Your transaction has been completed successfully.
+    </p>
+
+    <div style="background:#f9fafb;padding:16px;border-radius:8px;margin:24px 0;">
+      <h3 style="margin-top:0;">Transaction Details</h3>
+
+      <p><strong>Amount:</strong> ${amount}</p>
+      <p><strong>Recipient Account:</strong> ${recipientAccountNumber}</p>
+      <p><strong>Status:</strong> COMPLETED</p>
+    </div>
+
+    <div style="background:#ecfdf5;padding:16px;border-radius:8px;">
+      <strong>Security Reminder</strong>
+      <p style="margin-bottom:0;">
+        If you do not recognize this transaction, please contact our support team immediately.
+      </p>
+    </div>
+
+  </div>
+
+  <div style="background:#f3f4f6;padding:16px;text-align:center;font-size:12px;color:#6b7280;">
+    © 2026 SimpleWay. All rights reserved.
+    <br/>
+    This is an automated email. Please do not reply directly to this message.
+  </div>
+
+</div>
+`;
 
   await sendEmail(userEmail, subject, text, html);
 }
@@ -155,11 +220,76 @@ export async function sendTransactionFailureEmail(
   userEmail: string,
   name: string,
   amount: number,
-  toAccount: string,
-) {
+  recipientAccountNumber: string,
+): Promise<void> {
   const subject = "Transaction Failed";
-  const text = `Bla Bla`;
-  const html = `Bla Bla`;
+
+  const text = `
+Hello ${name},
+
+Unfortunately, we could not complete your transaction.
+
+Transaction Details:
+- Amount: ${amount}
+- Recipient Account: ${recipientAccountNumber}
+- Status: FAILED
+
+No money has been transferred.
+
+Please verify your account information and try again. If the issue continues, contact our support team.
+
+Best Regards,
+SimpleWay Team
+
+This is an automated email. Please do not reply to this email.
+`;
+
+  const html = `
+<div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+
+  <div style="background:#111827;color:white;padding:24px;text-align:center;">
+    <h1 style="margin:0;">SimpleWay</h1>
+  </div>
+
+  <div style="padding:32px;">
+
+    <h2 style="margin-top:0;">
+      Transaction Failed ❌
+    </h2>
+
+    <p>
+      Hello <strong>${name}</strong>,
+    </p>
+
+    <p>
+      Unfortunately, your transaction could not be completed.
+    </p>
+
+    <div style="background:#f9fafb;padding:16px;border-radius:8px;margin:24px 0;">
+      <h3 style="margin-top:0;">Transaction Details</h3>
+
+      <p><strong>Amount:</strong> ${amount}</p>
+      <p><strong>Recipient Account:</strong> ${recipientAccountNumber}</p>
+      <p><strong>Status:</strong> FAILED</p>
+    </div>
+
+    <div style="background:#fef2f2;padding:16px;border-radius:8px;">
+      <strong>What should you do?</strong>
+      <p style="margin-bottom:0;">
+        Please verify your information and try again. If the issue persists, contact our support team.
+      </p>
+    </div>
+
+  </div>
+
+  <div style="background:#f3f4f6;padding:16px;text-align:center;font-size:12px;color:#6b7280;">
+    © 2026 SimpleWay. All rights reserved.
+    <br/>
+    This is an automated email. Please do not reply directly to this message.
+  </div>
+
+</div>
+`;
 
   await sendEmail(userEmail, subject, text, html);
 }
