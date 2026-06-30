@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/jwt";
 import { userModel, KycStatus, UserRole } from "@/modules/user/user.model";
 
@@ -34,5 +34,36 @@ export async function requireAuth(
     };
   } catch {
     return null;
+  }
+}
+
+export async function requireSystemUser(
+  request: NextRequest,
+): Promise<boolean> {
+  try {
+    const token = request.cookies.get("token");
+
+    if (!token) {
+      return false;
+    }
+
+    const payload = verifyToken(token.value);
+
+    const user = await userModel
+      .findById(payload.userId)
+      .select("+systemUser");
+
+    if (!user) {
+      return false;
+    }
+
+    if (!user.systemUser) {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("System authentication failed:", error);
+    return false;
   }
 }

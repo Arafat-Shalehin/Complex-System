@@ -17,6 +17,7 @@ export interface IUser {
   accountStatus: AccountStatus;
   kycVerification: KycStatus;
   isBanned: boolean;
+  systemUser: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -75,6 +76,12 @@ const userSchema = new Schema<UserModelType>(
     isBanned: {
       type: Boolean,
       default: false,
+    },
+    systemUser: {
+      type: Boolean,
+      default: false,
+      immutable: true,
+      select: false,
     },
   },
   {
